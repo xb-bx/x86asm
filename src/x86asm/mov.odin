@@ -9,7 +9,8 @@ mov_rm8_r8 :: Opcode { bytes = [4]u8 { 0x88, 0, 0,0}, size = 1}
 mov_rm64_imm :: Opcode { bytes = [4]u8 { 0xc7, 0, 0,0}, size = 1} 
 mov_rm8_imm :: Opcode { bytes = [4]u8 { 0xc6, 0, 0,0}, size = 1} 
 lea_r64_m ::  Opcode { bytes = [4]u8 { 0x8D, 0, 0,0}, size = 1} 
-
+movsx_r16_rm8 :: Opcode { bytes = [4]u8 {0x0f, 0xbe, 0,0,}, size = 2}
+movsx_r32_rm16 :: Opcode { bytes = [4]u8 {0x0f, 0xbf,0,0,}, size = 2}
 
 mov_reg64_reg64 :: proc(using assembler: ^Assembler, dest: Reg64, src: Reg64) {
     if mnemonics != nil { append(&mnemonics, fmt.aprintf("mov %s, %s", dest, src)) }
@@ -181,6 +182,67 @@ lea :: proc(using assembler: ^Assembler, dest: Reg64, src: Memory) {
     generic_from_memory_to_reg(assembler, {.W}, false, lea_r64_m, .RM, int(dest), src)
 
 }
+movsx_reg16_reg8 :: proc(using assembler: ^Assembler, dest: Reg16, src: Reg8) {
+    isrc := u8(src)
+    assert(!(u8(dest) > 7 && u8(src) > 15))
+    rex: RexPrefix = {}
+    if isrc >= u8(Reg8.Spl) && isrc <= u8(Reg8.Dil) { rex = {.Rex}}
+    if isrc > 15 { isrc -= 12 }
+    if mnemonics != nil { append(&mnemonics, fmt.aprintf("movsx %s, %s", dest, src)) }
+    generic_reg_or_imm_to_reg(assembler, rex, OLD_PREFIX, movsx_r16_rm8, REGISTER_DIRECT, int(dest), int(isrc), 0, 0, OperandEncoding.RM) 
+}
+
+movsx_reg64_reg8 :: proc(using assembler: ^Assembler, dest: Reg64, src: Reg8) {
+    isrc := u8(src)
+    assert(!(u8(dest) > 7 && u8(src) > 15))
+    rex: RexPrefix = {}
+    if isrc >= u8(Reg8.Spl) && isrc <= u8(Reg8.Dil) { rex = {.Rex}}
+    if isrc > 15 { isrc -= 12 }
+    if mnemonics != nil { append(&mnemonics, fmt.aprintf("movsx %s, %s", dest, src)) }
+    generic_reg_or_imm_to_reg(assembler, rex | {.W}, nil, movsx_r16_rm8, REGISTER_DIRECT, int(dest), int(isrc), 0, 0, OperandEncoding.RM) 
+}
+
+movsx_reg32_reg8 :: proc(using assembler: ^Assembler, dest: Reg32, src: Reg8) {
+    isrc := u8(src)
+    assert(!(u8(dest) > 7 && u8(src) > 15))
+    rex: RexPrefix = {}
+    if isrc >= u8(Reg8.Spl) && isrc <= u8(Reg8.Dil) { rex = {.Rex}}
+    if isrc > 15 { isrc -= 12 }
+    if mnemonics != nil { append(&mnemonics, fmt.aprintf("movsx %s, %s", dest, src)) }
+    generic_reg_or_imm_to_reg(assembler, rex, nil, movsx_r16_rm8, REGISTER_DIRECT, int(dest), int(isrc), 0, 0, OperandEncoding.RM) 
+}
+
+movsx_reg64_reg16 :: proc(using assembler: ^Assembler, dest: Reg64, src: Reg16) {
+    if mnemonics != nil { append(&mnemonics, fmt.aprintf("movsx %s, %s", dest, src)) }
+    generic_reg_or_imm_to_reg(assembler, {.W}, nil, movsx_r32_rm16, REGISTER_DIRECT, int(dest), int(src), 0, 0, OperandEncoding.RM) 
+}
+movsx_reg32_reg16 :: proc(using assembler: ^Assembler, dest: Reg32, src: Reg16) {
+    if mnemonics != nil { append(&mnemonics, fmt.aprintf("movsx %s, %s", dest, src)) }
+    generic_reg_or_imm_to_reg(assembler, {}, nil, movsx_r32_rm16, REGISTER_DIRECT, int(dest), int(src), 0, 0, OperandEncoding.RM) 
+}
+
+movsx_reg64_memory8 :: proc(using assembler: ^Assembler, dest: Reg64, src: Memory) {
+    if mnemonics != nil { append(&mnemonics, fmt.aprintf("movsx %s, byte %v", dest, src)) }
+    generic_from_memory_to_reg(assembler, {.W}, false, movsx_r16_rm8, .RM, int(dest), src)
+}
+movsx_reg32_memory8 :: proc(using assembler: ^Assembler, dest: Reg32, src: Memory) {
+    if mnemonics != nil { append(&mnemonics, fmt.aprintf("movsx %s, byte %v", dest, src)) }
+    generic_from_memory_to_reg(assembler, {}, false, movsx_r16_rm8, .RM, int(dest), src)
+}
+movsx_reg16_memory8 :: proc(using assembler: ^Assembler, dest: Reg16, src: Memory) {
+    if mnemonics != nil { append(&mnemonics, fmt.aprintf("movsx %s, byte %v", dest, src)) }
+    generic_from_memory_to_reg(assembler, {}, true, movsx_r16_rm8, .RM, int(dest), src)
+}
+movsx_reg64_memory16 :: proc(using assembler: ^Assembler, dest: Reg64, src: Memory) {
+    if mnemonics != nil { append(&mnemonics, fmt.aprintf("movsx %s, word %v", dest, src)) }
+    generic_from_memory_to_reg(assembler, {.W}, false, movsx_r32_rm16, .RM, int(dest), src)
+}
+movsx_reg32_memory16 :: proc(using assembler: ^Assembler, dest: Reg32, src: Memory) {
+    if mnemonics != nil { append(&mnemonics, fmt.aprintf("movsx %s, word %v", dest, src)) }
+    generic_from_memory_to_reg(assembler, {}, false, movsx_r32_rm16, .RM, int(dest), src)
+}
+
+
 
 
 mov :: proc { 
@@ -191,4 +253,6 @@ mov :: proc {
     mov_memory_imm, mov_memory_imm16, mov_memory_imm8,
     mov_reg_imm, mov_reg_imm8, mov_reg_imm16,
 }
-movsx :: proc {movsx_memory_imm, movsx_reg_imm}
+movsx :: proc {movsx_memory_imm, movsx_reg_imm, movsx_reg32_reg8, movsx_reg16_reg8, movsx_reg64_reg8, movsx_reg32_reg16, movsx_reg64_reg16}
+movsx_mem16 :: proc { movsx_reg32_memory16, movsx_reg64_memory16 }
+movsx_mem8 :: proc { movsx_reg32_memory8, movsx_reg64_memory8, movsx_reg16_memory8 }

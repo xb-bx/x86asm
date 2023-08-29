@@ -85,6 +85,11 @@ test_mov_register_to_register :: proc(t: ^testing.T) {
             mov(assembler, Reg16(i), Reg16(j))
             mov(assembler, Reg32(i), Reg32(j))
             mov(assembler, Reg64(i), Reg64(j))
+            movsx(assembler, Reg64(i), Reg8(j))
+            movsx(assembler, Reg16(i), Reg8(j))
+            movsx(assembler, Reg32(i), Reg8(j))
+            movsx(assembler, Reg64(i), Reg16(j))
+            movsx(assembler, Reg32(i), Reg16(j))
         }
     }
     splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), "\n")
@@ -108,6 +113,11 @@ test_mov_from_memory_at_sib_to_reg:: proc(t: ^testing.T) {
             mov(assembler, Reg16(i), at(Reg64(i), Reg64(j),  i32(i + j), 2))
             mov(assembler, Reg32(i), at(Reg64(i), Reg64(j),  i32(i + j), 2))
             mov(assembler, Reg64(i), at(Reg64(i), Reg64(j),  i32(i + j), 2))
+            movsx_mem16(assembler, Reg32(i), at(Reg64(i), Reg64(j),  i32(i + j), 2))
+            movsx_mem16(assembler, Reg64(i), at(Reg64(i), Reg64(j),  i32(i + j), 2))
+            movsx_mem8(assembler, Reg64(i), at(Reg64(i), Reg64(j),  i32(i + j), 2))
+            movsx_mem8(assembler, Reg32(i), at(Reg64(i), Reg64(j),  i32(i + j), 2))
+            movsx_mem8(assembler, Reg16(i), at(Reg64(i), Reg64(j),  i32(i + j), 2))
         }
     }
     splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), "\n")
