@@ -8,6 +8,7 @@ mov_r8_rm8 :: Opcode { bytes = [4]u8 { 0x8A, 0, 0,0}, size = 1}
 mov_rm8_r8 :: Opcode { bytes = [4]u8 { 0x88, 0, 0,0}, size = 1} 
 mov_rm64_imm :: Opcode { bytes = [4]u8 { 0xc7, 0, 0,0}, size = 1} 
 mov_rm8_imm :: Opcode { bytes = [4]u8 { 0xc6, 0, 0,0}, size = 1} 
+lea_r64_m ::  Opcode { bytes = [4]u8 { 0x8D, 0, 0,0}, size = 1} 
 
 
 mov_reg64_reg64 :: proc(using assembler: ^Assembler, dest: Reg64, src: Reg64) {
@@ -175,6 +176,11 @@ movsx_reg_imm :: proc(using assembler: ^Assembler, dest: Reg64, src: i32) {
 
 
 
+lea :: proc(using assembler: ^Assembler, dest: Reg64, src: Memory) {
+    if mnemonics != nil { append(&mnemonics, fmt.aprintf("lea %s, %v", dest, src)) }
+    generic_from_memory_to_reg(assembler, {.W}, false, lea_r64_m, .RM, int(dest), src)
+
+}
 
 
 mov :: proc { 
