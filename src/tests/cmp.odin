@@ -107,6 +107,11 @@ test_cmp_from_memory_at_register_to_reg:: proc(t: ^testing.T) {
             cmp(assembler, Reg16(i), at(Reg64(j), i32(i + j)))
             cmp(assembler, Reg32(i), at(Reg64(j), i32(i + j)))
             cmp(assembler, Reg64(i), at(Reg64(j), i32(i + j)))
+            cmp(assembler, Reg8(i), 42)
+            cmp(assembler, Reg16(i), 42)
+            cmp(assembler, Reg32(i), 42)
+            cmpsx(assembler, Reg64(i), 42)
+
         }
     }
     splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), "\n")

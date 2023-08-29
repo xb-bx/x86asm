@@ -111,10 +111,55 @@ cmpsx_memory_imm :: proc(using assembler: ^Assembler, dest: Memory, src: i32) {
      
     generic_from_imm_to_memory(assembler, {.W}, false, cmp_rm64_imm, dest, int(src), 4)
 }
+cmp_reg_imm8 :: proc(using assembler: ^Assembler, dest: Reg8, src: u8) {
+    if src >= 10 {
+        if mnemonics != nil { append(&mnemonics, fmt.aprintf("cmp %v, 0x%x", dest, src)) }
+    }
+    else {
+        if mnemonics != nil { append(&mnemonics, fmt.aprintf("cmp %v, %i", dest, src)) }
+    }
+    idest := u8(dest)
+    rex := RexPrefix {}
+    if idest >= u8(Reg8.Spl) && idest <= u8(Reg8.Dil) { rex = {.Rex}}
+    if idest > 15 { idest -= 12 }
+    generic_reg_or_imm_to_reg(assembler, {.Rex}, nil, cmp_rm8_imm, 0b1100_0000, int(idest), 0, int(src), 1, OperandEncoding.MI)
+}
+cmp_reg_imm16 :: proc(using assembler: ^Assembler, dest: Reg16, src: i16) {
+    if src >= 10 {
+        if mnemonics != nil { append(&mnemonics, fmt.aprintf("cmp %v, 0x%x", dest, src)) }
+    }
+    else {
+        if mnemonics != nil { append(&mnemonics, fmt.aprintf("cmp %v, %i", dest, src)) }
+    }
+     
+    generic_reg_or_imm_to_reg(assembler, {}, OLD_PREFIX, cmp_rm64_imm, 0b1100_0000, int(dest), 0, int(src), 2, OperandEncoding.MI)
+}
+cmp_reg_imm :: proc(using assembler: ^Assembler, dest: Reg32, src: i32) {
+    if src >= 10 {
+        if mnemonics != nil { append(&mnemonics, fmt.aprintf("cmp %v, 0x%x", dest, src)) }
+    }
+    else {
+        if mnemonics != nil { append(&mnemonics, fmt.aprintf("cmp %v, %i", dest, src)) }
+    }
+     
+    generic_reg_or_imm_to_reg(assembler, {}, nil, cmp_rm64_imm, 0b1100_0000, int(dest), 0, int(src), 4, OperandEncoding.MI)
+     
+}
+cmpsx_reg_imm :: proc(using assembler: ^Assembler, dest: Reg64, src: i32) {
+    if src >= 10 {
+        if mnemonics != nil { append(&mnemonics, fmt.aprintf("cmp %v, 0x%x", dest, src)) }
+    }
+    else {
+        if mnemonics != nil { append(&mnemonics, fmt.aprintf("cmp %v, %i", dest, src)) }
+    }
+     
+    generic_reg_or_imm_to_reg(assembler, {.W}, nil, cmp_rm64_imm, 0b1100_0000, int(dest), 0, int(src), 4, OperandEncoding.MI)
+}
 cmp :: proc { 
     cmp_reg64_memory, sub_reg32_memory, sub_reg16_memory, sub_reg8_memory, 
     cmp_reg64_reg64, sub_reg32_reg32, sub_reg16_reg16, sub_reg8_reg8, 
     cmp_memory_reg64, sub_memory_reg32, sub_memory_reg16, sub_memory_reg8,
     cmp_memory_imm, sub_memory_imm16, sub_memory_imm8,
+    cmp_reg_imm, cmp_reg_imm16, cmp_reg_imm8,
 }
-cmpsx :: proc {subsx_memory_imm}
+cmpsx :: proc {cmpsx_memory_imm, cmpsx_reg_imm}
