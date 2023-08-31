@@ -28,6 +28,30 @@ test_cvtss2sd:: proc(t: ^testing.T) {
     }
 }
 @test
+test_cvtsi2ss_sd:: proc(t: ^testing.T) {
+    using x86asm
+    set_formatter()   
+    context.user_ptr = t
+    assembler := make_asm()
+    for i in 0..=15 {
+        cvtsi2sd_xmm_reg32(assembler, Xmm(i), Reg32(i))
+        cvtsi2sd_mem32(assembler, Xmm(i), at(Reg64(i)))
+        cvtsi2sd_xmm_reg64(assembler, Xmm(i), Reg64(i))
+        cvtsi2sd_mem64(assembler, Xmm(i), at(Reg64(i)))
+        cvtsi2ss_xmm_reg32(assembler, Xmm(i), Reg32(i))
+        cvtsi2ss_mem32(assembler, Xmm(i), at(Reg64(i)))
+        cvtsi2ss_xmm_reg64(assembler, Xmm(i), Reg64(i))
+        cvtsi2ss_mem64(assembler, Xmm(i), at(Reg64(i)))
+    }
+    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), "\n")
+    for str,i in splited {
+        if !assert(splited[i] == assembler.mnemonics[i]) {
+            fmt.println(splited[i], assembler.mnemonics[i], assembler.bytes[:])
+            panic("")
+        }
+    }
+}
+@test
 test_cvttss_sd_2si:: proc(t: ^testing.T) {
     using x86asm
     set_formatter()   
