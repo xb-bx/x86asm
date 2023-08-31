@@ -25,5 +25,5 @@ mulsd_xmm_mem64 :: proc(using assembler: ^Assembler, dest: Xmm, src: Memory) {
     append(&assembler.bytes, 0xf2)
     generic_from_memory_to_reg(assembler, {}, false, mulsd_xmm1_xmm2, .RM, int(dest), src)
 }
-mulss :: proc { addss_xmm_xmm, addss_xmm_mem32 }
-mulsd :: proc { addsd_xmm_xmm, addsd_xmm_mem64 }
+mulss :: proc { mulss_xmm_xmm, mulss_xmm_mem32 }
+mulsd :: proc { mulsd_xmm_xmm, mulsd_xmm_mem64 }

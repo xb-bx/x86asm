@@ -984,7 +984,7 @@ main :: proc() {
     set_formatter()
     asmm := Assembler {} 
     init_asm(&asmm)
-    movss_xmm_xmm(&asmm, xmm8, xmm1)
+//     (&asmm, xmm8, xmm1)
     
 //     for i in 0..=15{
 //         mov_reg32_memory(&asmm, Reg32(i), at(Reg64.Rbp, Reg64.R8, 256, 2))
