@@ -973,6 +973,7 @@ set_formatter :: proc() {
     err = fmt.register_user_formatter(Reg32, reg_formatter)
     err = fmt.register_user_formatter(Reg16, reg_formatter)
     err = fmt.register_user_formatter(Reg8, reg_formatter)
+    err = fmt.register_user_formatter(Xmm, reg_formatter)
     err = fmt.register_user_formatter(Memory, memory_formatter)
     err = fmt.register_user_formatter([]u8, array_formatter)
 }
@@ -983,7 +984,7 @@ main :: proc() {
     set_formatter()
     asmm := Assembler {} 
     init_asm(&asmm)
-    subsx(&asmm, rcx, i32(0xaf))
+    movss_xmm_xmm(&asmm, xmm8, xmm1)
     
 //     for i in 0..=15{
 //         mov_reg32_memory(&asmm, Reg32(i), at(Reg64.Rbp, Reg64.R8, 256, 2))

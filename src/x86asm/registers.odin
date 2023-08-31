@@ -169,3 +169,19 @@ bh :: Reg8.Bh
 
 
 
+xmm0 :: Xmm.Xmm0
+xmm1 :: Xmm.Xmm1
+xmm2 :: Xmm.Xmm2
+xmm3 :: Xmm.Xmm3
+xmm4 :: Xmm.Xmm4
+xmm5 :: Xmm.Xmm5
+xmm6 :: Xmm.Xmm6
+xmm7 :: Xmm.Xmm7
+xmm8 :: Xmm.Xmm8
+xmm9 :: Xmm.Xmm9
+xmm10 :: Xmm.Xmm10
+xmm11 :: Xmm.Xmm11
+xmm12 :: Xmm.Xmm12
+xmm13 :: Xmm.Xmm13
+xmm14 :: Xmm.Xmm14
+xmm15 :: Xmm.Xmm15
