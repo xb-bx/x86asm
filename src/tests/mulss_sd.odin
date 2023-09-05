@@ -18,7 +18,7 @@ test_mulss:: proc(t: ^testing.T) {
         mulsd_xmm_xmm(assembler, Xmm(i), Xmm(i))
         mulsd_xmm_mem64(assembler, Xmm(i), at(rax))
     }
-    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), "\n")
+    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), SPLITTER)
     for str,i in splited {
         if !assert(splited[i] == assembler.mnemonics[i]) {
             fmt.println(splited[i], assembler.mnemonics[i], assembler.bytes[:])

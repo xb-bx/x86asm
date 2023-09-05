@@ -19,7 +19,7 @@ test_cvtss2sd:: proc(t: ^testing.T) {
         cvtsd2ss_xmm_xmm(assembler, Xmm(i), Xmm(i))
         cvtsd2ss_xmm_mem64(assembler, Xmm(i), at(Reg64(i)))
     }
-    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), "\n")
+    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), SPLITTER)
     for str,i in splited {
         if !assert(splited[i] == assembler.mnemonics[i]) {
             fmt.println(splited[i], assembler.mnemonics[i], assembler.bytes[:])
@@ -43,7 +43,7 @@ test_cvtsi2ss_sd:: proc(t: ^testing.T) {
         cvtsi2ss_xmm_reg64(assembler, Xmm(i), Reg64(i))
         cvtsi2ss_mem64(assembler, Xmm(i), at(Reg64(i)))
     }
-    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), "\n")
+    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), SPLITTER)
     for str,i in splited {
         if !assert(splited[i] == assembler.mnemonics[i]) {
             fmt.println(splited[i], assembler.mnemonics[i], assembler.bytes[:])
@@ -67,7 +67,7 @@ test_cvttss_sd_2si:: proc(t: ^testing.T) {
         cvttss2si_reg64_xmm(assembler, Reg64(i), Xmm(i))
         cvttss2si_reg64_mem64(assembler, Reg64(i), at(Reg64(i)))
     }
-    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), "\n")
+    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), SPLITTER)
     for str,i in splited {
         if !assert(splited[i] == assembler.mnemonics[i]) {
             fmt.println(splited[i], assembler.mnemonics[i], assembler.bytes[:])

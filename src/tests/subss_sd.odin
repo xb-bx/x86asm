@@ -18,7 +18,7 @@ test_subss:: proc(t: ^testing.T) {
         subsd_xmm_xmm(assembler, Xmm(i), Xmm(i))
         subsd_xmm_mem64(assembler, Xmm(i), at(rax))
     }
-    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), "\n")
+    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), SPLITTER)
     for str,i in splited {
         if !assert(splited[i] == assembler.mnemonics[i]) {
             fmt.println(splited[i], assembler.mnemonics[i], assembler.bytes[:])

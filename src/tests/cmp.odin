@@ -18,7 +18,7 @@ test_cmp_memory_imm :: proc(t: ^testing.T) {
         cmp(assembler, at(Reg64(i), 0xfff), i16(i))    
         cmp(assembler, at(Reg64(i), 0xfff), u8(i))    
     }
-    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), "\n")
+    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), SPLITTER)
     for str,i in splited {
         if !assert(splited[i] == assembler.mnemonics[i]) {
             fmt.println(splited[i], assembler.mnemonics[i], assembler.bytes[:])
@@ -41,7 +41,7 @@ test_cmp_register_to_memory :: proc(t: ^testing.T) {
             cmp(assembler, at(Reg64(i), Reg64(j), 8, 2), Reg8(j))
         }
     }
-    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), "\n")
+    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), SPLITTER)
     for str,i in splited {
         if !assert(splited[i] == assembler.mnemonics[i]) {
             fmt.println(splited[i], assembler.mnemonics[i], assembler.bytes[:])
@@ -64,7 +64,7 @@ test_cmp_register_to_register :: proc(t: ^testing.T) {
             cmp(assembler, Reg64(i), Reg64(j))
         }
     }
-    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), "\n")
+    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), SPLITTER)
     for str,i in splited {
         if !assert(splited[i] == assembler.mnemonics[i]) {
             fmt.println(splited[i], assembler.mnemonics[i], assembler.bytes[:])
@@ -87,7 +87,7 @@ test_cmp_from_memory_at_sib_to_reg:: proc(t: ^testing.T) {
             cmp(assembler, Reg64(i), at(Reg64(i), Reg64(j),  i32(i + j), 2))
         }
     }
-    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), "\n")
+    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), SPLITTER)
     for str,i in splited {
         if !assert(splited[i] == assembler.mnemonics[i]) {
             fmt.println(splited[i], assembler.mnemonics[i], assembler.bytes[:])
@@ -114,7 +114,7 @@ test_cmp_from_memory_at_register_to_reg:: proc(t: ^testing.T) {
 
         }
     }
-    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), "\n")
+    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), SPLITTER)
     for str,i in splited {
         if !assert(splited[i] == assembler.mnemonics[i]) {
             fmt.println(splited[i], assembler.mnemonics[i], assembler.bytes[:])

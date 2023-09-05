@@ -23,7 +23,7 @@ test_not_reg :: proc(t: ^testing.T) {
         not_m32(assembler, at(Reg64(i)))
         not_m64(assembler, at(Reg64(i)))
     }
-    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), "\n")
+    splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), SPLITTER)
     for str,i in splited {
         if !assert(splited[i] == assembler.mnemonics[i]) {
             fmt.println(splited[i], assembler.mnemonics[i], assembler.bytes[:])
