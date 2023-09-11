@@ -163,4 +163,4 @@ and :: proc {
     and_memory_imm, and_memory_imm16, or_memory_imm8,
     and_reg_imm8, and_reg_imm16, or_reg_imm,
 }
-andsx :: proc {andsx_memory_imm, orsx_reg_imm}
+andsx :: proc {andsx_memory_imm, andsx_reg_imm}
