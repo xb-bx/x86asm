@@ -156,10 +156,10 @@ cmpsx_reg_imm :: proc(using assembler: ^Assembler, dest: Reg64, src: i32) {
     generic_reg_or_imm_to_reg(assembler, {.W}, nil, cmp_rm64_imm, 0b1100_0000, int(dest), 0, int(src), 4, OperandEncoding.MI)
 }
 cmp :: proc { 
-    cmp_reg64_memory, sub_reg32_memory, sub_reg16_memory, sub_reg8_memory, 
-    cmp_reg64_reg64, sub_reg32_reg32, sub_reg16_reg16, sub_reg8_reg8, 
-    cmp_memory_reg64, sub_memory_reg32, sub_memory_reg16, sub_memory_reg8,
-    cmp_memory_imm, sub_memory_imm16, sub_memory_imm8,
+    cmp_reg64_memory, cmp_reg32_memory, cmp_reg16_memory, cmp_reg8_memory, 
+    cmp_reg64_reg64, cmp_reg32_reg32, cmp_reg16_reg16, cmp_reg8_reg8, 
+    cmp_memory_reg64, cmp_memory_reg32, cmp_memory_reg16, cmp_memory_reg8,
+    cmp_memory_imm, cmp_memory_imm16, cmp_memory_imm8,
     cmp_reg_imm, cmp_reg_imm16, cmp_reg_imm8,
 }
 cmpsx :: proc {cmpsx_memory_imm, cmpsx_reg_imm}
