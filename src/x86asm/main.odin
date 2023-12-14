@@ -1,8 +1,8 @@
 package x86asm
 import "core:fmt"
 import "core:strings"
+import "core:testing"
 when ODIN_TEST {
-    import "core:testing"
     assert :: proc(b: bool, loc := #caller_location) -> bool {
         t := transmute(^testing.T)context.user_ptr 
         if !b {
