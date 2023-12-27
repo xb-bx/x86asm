@@ -157,10 +157,10 @@ andsx_memory_imm :: proc(using assembler: ^Assembler, dest: Memory, src: i32) {
     generic_from_imm_to_memory(assembler, {.W}, false, and_rm64_imm, dest, int(src), 4)
 }
 and :: proc { 
-    and_reg64_memory, and_reg32_memory, or_reg16_memory, or_reg8_memory, 
-    and_reg64_reg64, and_reg32_reg32, or_reg16_reg16, or_reg8_reg8, 
-    and_memory_reg64, and_memory_reg32, or_memory_reg16, or_memory_reg8,
-    and_memory_imm, and_memory_imm16, or_memory_imm8,
-    and_reg_imm8, and_reg_imm16, or_reg_imm,
+    and_reg64_memory, and_reg32_memory, and_reg16_memory, and_reg8_memory, 
+    and_reg64_reg64, and_reg32_reg32, and_reg16_reg16, and_reg8_reg8, 
+    and_memory_reg64, and_memory_reg32, and_memory_reg16, and_memory_reg8,
+    and_memory_imm, and_memory_imm16, and_memory_imm8,
+    and_reg_imm8, and_reg_imm16, and_reg_imm,
 }
 andsx :: proc {andsx_memory_imm, andsx_reg_imm}
