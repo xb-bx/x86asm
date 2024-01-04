@@ -17,6 +17,10 @@ test_shr_cl:: proc(t: ^testing.T) {
         shr_reg16_cl(assembler, Reg16(i))
         shr_reg32_cl(assembler, Reg32(i))
         shr_reg64_cl(assembler, Reg64(i))
+        sar_reg16_cl(assembler, Reg16(i))
+        sar_reg32_cl(assembler, Reg32(i))
+        sar_reg64_cl(assembler, Reg64(i))
+
     }
     splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), SPLITTER)
     for str,i in splited {
