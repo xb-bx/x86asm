@@ -149,10 +149,9 @@ generic_from_reg_to_memory_sib :: proc(using assembler: ^Assembler, rex: RexPref
         for i in 0..<opcode.size {
             append(&bytes, opcode.bytes[i])
         }
-        modrm |= u8(src & 7)
+        modrm |= u8(src & 7) << 3
         append(&bytes, modrm)
         append(&bytes, 0x24)
-        
         switch disp_size {
             case 1:
                 append(&bytes, u8(dest.offset & 0xff))

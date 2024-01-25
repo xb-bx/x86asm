@@ -13,12 +13,14 @@ test_movss:: proc(t: ^testing.T) {
     context.user_ptr = t
     assembler := make_asm()
     for i in 0..=15 {
-        movss_xmm_xmm(assembler, Xmm(i), Xmm(i))
-        movss_xmm_mem32(assembler, Xmm(i), at(rax))
-        movss_mem32_xmm(assembler, at(rax), Xmm(i))
-        movsd_xmm_xmm(assembler, Xmm(i), Xmm(i))
-        movsd_xmm_mem64(assembler, Xmm(i), at(rax))
-        movsd_mem64_xmm(assembler, at(rax), Xmm(i))
+        for j in 0..=15 {
+            movss_xmm_xmm(assembler, Xmm(i), Xmm(i))
+            movss_xmm_mem32(assembler, Xmm(i), at(rax))
+            movss_mem32_xmm(assembler, at(Reg64(j)), Xmm(i))
+            movsd_xmm_xmm(assembler, Xmm(i), Xmm(i))
+            movsd_xmm_mem64(assembler, Xmm(i), at(Reg64(j)))
+            movsd_mem64_xmm(assembler, at(Reg64(j)), Xmm(i))
+        }
     }
     splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), SPLITTER)
     for str,i in splited {
