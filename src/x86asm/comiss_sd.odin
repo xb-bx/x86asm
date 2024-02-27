@@ -10,12 +10,7 @@ comiss_xmm_xmm :: proc(using assembler: ^Assembler, dest: Xmm, src: Xmm) {
     generic_reg_or_imm_to_reg(assembler, { }, nil, comiss_xmm1_xmm2, REGISTER_DIRECT, int(dest), int(src), 0, 0, OperandEncoding.RM) 
 }
 comiss_xmm_mem32 :: proc(using assembler: ^Assembler, dest: Xmm, src: Memory) {
-    when ODIN_OS == .Windows {
-        if mnemonics != nil { append(&mnemonics, fmt.aprintf("comiss %s, dword %s", dest, src)) }
-    }
-    else {
-        if mnemonics != nil { append(&mnemonics, fmt.aprintf("comiss %s, xmmword %s", dest, src)) }
-    }
+    if mnemonics != nil { append(&mnemonics, fmt.aprintf("comiss %s, dword %s", dest, src)) }
     generic_from_memory_to_reg(assembler, {}, false, comiss_xmm1_xmm2, .RM, int(dest), src)
 }
 comisd_xmm_xmm :: proc(using assembler: ^Assembler, dest: Xmm, src: Xmm) {
