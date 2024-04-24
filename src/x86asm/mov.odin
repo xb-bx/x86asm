@@ -216,6 +216,14 @@ movzx_reg32_reg8 :: proc(using assembler: ^Assembler, dest: Reg32, src: Reg8) {
     generic_reg_or_imm_to_reg(assembler, rex, nil, movzx_r16_rm8, REGISTER_DIRECT, int(dest), int(isrc), 0, 0, OperandEncoding.RM) 
 }
 
+movzx_reg64_reg16 :: proc(using assembler: ^Assembler, dest: Reg64, src: Reg16) {
+    if mnemonics != nil { append(&mnemonics, fmt.aprintf("movzx %s, %s", dest, src)) }
+    generic_reg_or_imm_to_reg(assembler, {.W}, nil, movzx_r32_rm16, REGISTER_DIRECT, int(dest), int(src), 0, 0, OperandEncoding.RM) 
+}
+movzx_reg32_reg16 :: proc(using assembler: ^Assembler, dest: Reg32, src: Reg16) {
+    if mnemonics != nil { append(&mnemonics, fmt.aprintf("movzx %s, %s", dest, src)) }
+    generic_reg_or_imm_to_reg(assembler, {}, nil, movzx_r32_rm16, REGISTER_DIRECT, int(dest), int(src), 0, 0, OperandEncoding.RM) 
+}
 
 movsx_reg16_reg8 :: proc(using assembler: ^Assembler, dest: Reg16, src: Reg8) {
     isrc := u8(src)
@@ -288,7 +296,7 @@ mov :: proc {
     mov_memory_imm, mov_memory_imm16, mov_memory_imm8,
     mov_reg_imm, mov_reg_imm8, mov_reg_imm16,
 }
-movzx :: proc { movzx_reg32_reg8, movzx_reg16_reg8, movzx_reg64_reg8}
+movzx :: proc { movzx_reg32_reg8, movzx_reg16_reg8, movzx_reg64_reg8, movzx_reg32_reg16, movzx_reg64_reg16}
 movsx :: proc {movsx_memory_imm, movsx_reg_imm, movsx_reg32_reg8, movsx_reg16_reg8, movsx_reg64_reg8, movsx_reg32_reg16, movsx_reg64_reg16}
 movsx_mem16 :: proc { movsx_reg32_memory16, movsx_reg64_memory16 }
 movsx_mem8 :: proc { movsx_reg32_memory8, movsx_reg64_memory8, movsx_reg16_memory8 }
