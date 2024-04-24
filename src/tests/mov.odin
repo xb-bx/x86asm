@@ -90,6 +90,9 @@ test_mov_register_to_register :: proc(t: ^testing.T) {
             movsx(assembler, Reg32(i), Reg8(j))
             movsx(assembler, Reg64(i), Reg16(j))
             movsx(assembler, Reg32(i), Reg16(j))
+            movzx(assembler, Reg64(i), Reg8(j))
+            movzx(assembler, Reg16(i), Reg8(j))
+            movzx(assembler, Reg32(i), Reg8(j))
         }
     }
     splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), SPLITTER)
