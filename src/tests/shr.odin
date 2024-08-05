@@ -4,7 +4,7 @@ import "core:testing"
 import "core:os"
 import "core:fmt"
 import "core:mem"
-import "core:intrinsics"
+import "base:intrinsics"
 import "core:strings"
 import "x86asm:x86asm"
 @test

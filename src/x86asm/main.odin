@@ -963,10 +963,10 @@ array_formatter :: proc(fi: ^fmt.Info, arg: any, verb: rune) -> bool {
     }
     return true
 }
+fmts := new_clone(make(map[typeid]fmt.User_Formatter))
 set_formatter :: proc() {
     if formatters_set { return }
     formatters_set = true
-    fmts := new_clone(make(map[typeid]fmt.User_Formatter))
     fmt.set_user_formatters(fmts)
     err := fmt.register_user_formatter(Reg64, reg_formatter)
     err = fmt.register_user_formatter(Reg32, reg_formatter)
