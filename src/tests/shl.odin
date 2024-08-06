@@ -13,6 +13,12 @@ test_shl_cl:: proc(t: ^testing.T) {
     context.user_ptr = t
     assembler := make_asm()
     for i in 0..=15 {
+        shl_m16_cl(assembler, at(Reg64(i)))
+        if i != 4 && i != 11 do shl_m16_cl(assembler, at(Reg64(rsp), Reg64(i)))
+        shl_m32_cl(assembler, at(Reg64(i)))
+        if i != 4 && i != 11 do shl_m32_cl(assembler, at(Reg64(rsp), Reg64(i)))
+        shl_m64_cl(assembler, at(Reg64(i)))
+        if i != 4 && i != 11 do shl_m64_cl(assembler, at(Reg64(rsp), Reg64(i)))
         shl_reg16_cl(assembler, Reg16(i))
         shl_reg32_cl(assembler, Reg32(i))
         shl_reg64_cl(assembler, Reg64(i))
