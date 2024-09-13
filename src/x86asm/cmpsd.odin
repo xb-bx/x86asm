@@ -4,14 +4,14 @@ import "core:fmt"
 cmpsd_xmm_xmmmem :: Opcode { bytes = [4]u8{0x0f, 0xc2,0, 0}, size = 2 }
 
 cmpsd_xmm_xmm :: proc(using assembler: ^Assembler, dest: Xmm, src: Xmm, op: CMPSSOP) {
-    if mnemonics != nil { append(&mnemonics, fmt.aprintf("cmp%ssd %s, %s", op, dest, src)) }
+    if remember { append(&mnemonics, fmt.aprintf("cmp%ssd %s, %s", op, dest, src)) }
     append(&assembler.bytes, 0xf2)
     generic_reg_or_imm_to_reg(assembler, { }, nil, cmpsd_xmm_xmmmem, REGISTER_DIRECT, int(dest), int(src), 0, 0, OperandEncoding.RM) 
     append(&assembler.bytes, u8(op))
 }
 
 cmpsd_xmm_mem :: proc(using assembler: ^Assembler, dest: Xmm, src: Memory, op: CMPSSOP) {
-    if mnemonics != nil { append(&mnemonics, fmt.aprintf("cmp%ssd %s, qword %s", op, dest, src)) }
+    if remember { append(&mnemonics, fmt.aprintf("cmp%ssd %s, qword %s", op, dest, src)) }
     append(&assembler.bytes, 0xf2)
     generic_from_memory_to_reg(assembler, {}, false, cmpsd_xmm_xmmmem, .RM, int(dest), src)
     append(&assembler.bytes, u8(op))

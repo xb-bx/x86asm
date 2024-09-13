@@ -2,6 +2,7 @@ package x86asm
 import "core:fmt"
 import "core:strings"
 import "core:testing"
+import "core:sync"
 when ODIN_TEST {
     assert :: proc(b: bool, loc := #caller_location) -> bool {
         t := transmute(^testing.T)context.user_ptr 
@@ -29,12 +30,14 @@ Assembler :: struct {
     labels: [dynamic]Label,
     labelplaces: [dynamic]Tuple(int, int),
     mnemonics: [dynamic]string,
+    remember: bool,
 }
 init_asm :: proc(using assembler: ^Assembler, remember_mnemonics: bool = false) {
     bytes = make([dynamic]u8, 0, 128)
     labels = make([dynamic]Label, 0, 16)
     labelplaces = make([dynamic]Tuple(int, int), 0, 16)
     if remember_mnemonics {
+        remember = true
         mnemonics = make([dynamic]string)
     }
 }
@@ -48,15 +51,15 @@ create_label :: proc(using assembler: ^Assembler) -> Label {
 set_label :: proc(using assembler: ^Assembler, lbl: Label) {
     lbl := &labels[lbl.id]    
     lbl.offset = len(bytes)
-    if mnemonics != nil { append(&mnemonics, fmt.aprintf("label_%i:", lbl.id)) }
+    if remember { append(&mnemonics, fmt.aprintf("label_%i:", lbl.id)) }
 }
 ret :: proc(using assembler: ^Assembler) {
     append(&bytes, 0xc3)
-    if mnemonics != nil { append(&mnemonics, fmt.aprintf("ret")) }
+    if remember { append(&mnemonics, fmt.aprintf("ret")) }
 }
 int3 :: proc(using assembler: ^Assembler) {
     append(&bytes, 0xcc)
-    if mnemonics != nil { append(&mnemonics, fmt.aprintf("int3")) }
+    if remember { append(&mnemonics, fmt.aprintf("int3")) }
 }
 assemble :: proc(using assebler: ^Assembler) {
     for place in labelplaces {
@@ -910,7 +913,7 @@ delete_asm :: proc(using assembler: ^Assembler) {
         delete(bytes)
         delete(labels)
         delete(labelplaces)
-        if mnemonics != nil {
+        if remember {
             for mnemonic in mnemonics {
                 delete(mnemonic)
             }
@@ -964,9 +967,12 @@ array_formatter :: proc(fi: ^fmt.Info, arg: any, verb: rune) -> bool {
     return true
 }
 fmts := new_clone(make(map[typeid]fmt.User_Formatter))
+fmt_mutex: sync.Mutex = {}
 set_formatter :: proc() {
-    if formatters_set { return }
-    formatters_set = true
+    if sync.mutex_guard(&fmt_mutex) {
+        if formatters_set || fmt._user_formatters != nil { return }
+        formatters_set = true
+    }
     fmt.set_user_formatters(fmts)
     err := fmt.register_user_formatter(Reg64, reg_formatter)
     err = fmt.register_user_formatter(Reg32, reg_formatter)

@@ -15,14 +15,14 @@ CMPSSOP :: enum {
 }
  
 cmpss_xmm_xmm :: proc(using assembler: ^Assembler, dest: Xmm, src: Xmm, op: CMPSSOP) {
-    if mnemonics != nil { append(&mnemonics, fmt.aprintf("cmp%sss %s, %s", op, dest, src)) }
+    if remember { append(&mnemonics, fmt.aprintf("cmp%sss %s, %s", op, dest, src)) }
     append(&assembler.bytes, 0xf3)
     generic_reg_or_imm_to_reg(assembler, { }, nil, cmpss_xmm_xmmmem, REGISTER_DIRECT, int(dest), int(src), 0, 0, OperandEncoding.RM) 
     append(&assembler.bytes, u8(op))
 }
 
 cmpss_xmm_mem :: proc(using assembler: ^Assembler, dest: Xmm, src: Memory, op: CMPSSOP) {
-    if mnemonics != nil { append(&mnemonics, fmt.aprintf("cmp%sss %s, dword %s", op, dest, src)) }
+    if remember { append(&mnemonics, fmt.aprintf("cmp%sss %s, dword %s", op, dest, src)) }
     append(&assembler.bytes, 0xf3)
     generic_from_memory_to_reg(assembler, {}, false, cmpss_xmm_xmmmem, .RM, int(dest), src)
     append(&assembler.bytes, u8(op))
