@@ -972,7 +972,6 @@ set_formatter :: proc() {
     if sync.mutex_guard(&fmt_mutex) {
         if formatters_set || fmt._user_formatters != nil { return }
         formatters_set = true
-    }
     fmt.set_user_formatters(fmts)
     err := fmt.register_user_formatter(Reg64, reg_formatter)
     err = fmt.register_user_formatter(Reg32, reg_formatter)
@@ -981,6 +980,7 @@ set_formatter :: proc() {
     err = fmt.register_user_formatter(Xmm, reg_formatter)
     err = fmt.register_user_formatter(Memory, memory_formatter)
     err = fmt.register_user_formatter([]u8, array_formatter)
+    }
 }
 
 formatters_set := false
@@ -989,17 +989,5 @@ main :: proc() {
     set_formatter()
     asmm := Assembler {} 
     init_asm(&asmm)
-//     (&asmm, xmm8, xmm1)
-    
-//     for i in 0..=15{
-//         mov_reg32_memory(&asmm, Reg32(i), at(Reg64.Rbp, Reg64.R8, 256, 2))
-//     }
-    for b in asmm.bytes {
-        fmt.printf("%2X", b)
-    }
-//     rex: u8 = u8(RexPrefix { .W, .R, .X, .B, .Rex})
-//     fmt.printf("%b", rex)
-//     assert(rex == 0b01001111)
-    
 }
 

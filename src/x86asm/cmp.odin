@@ -27,7 +27,8 @@ cmp_reg8_reg8 :: proc(using assembler: ^Assembler, dest: Reg8, src: Reg8) {
     assert(!(rex != {} && (isrc > 15 || idest > 15)))
     if remember { append(&mnemonics, fmt.aprintf("cmp %s, %s", dest, src)) }
     if idest > 15 { idest -= 12 }
-    generic_reg_or_imm_to_reg(assembler, rex, nil, cmp_r8_rm8, REGISTER_DIRECT, int(idest), int(src), 0, 0, OperandEncoding.RM) 
+    if isrc > 15 { isrc -= 12 }
+    generic_reg_or_imm_to_reg(assembler, rex, nil, cmp_r8_rm8, REGISTER_DIRECT, int(idest), int(isrc), 0, 0, OperandEncoding.RM) 
 }
 cmp_reg8_memory :: proc(using assembler: ^Assembler, dest: Reg8, src: Memory) {
     idest := u8(dest)
