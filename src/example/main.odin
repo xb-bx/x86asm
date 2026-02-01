@@ -1,3 +1,4 @@
+#+feature using-stmt
 package example
 import "core:fmt"
 

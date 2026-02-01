@@ -6,6 +6,7 @@ ODIN_FLAGS ?=\
 		   -o:none \
 		   -debug \
 		   -thread-count:$(shell nproc) \
+		   -error-pos-style:unix \
 		   -use-separate-modules
 example: src/example/main.odin
 	odin build src/example $(COLLECTIONS_FLAGS) $(ODIN_FLAGS) -out:$@

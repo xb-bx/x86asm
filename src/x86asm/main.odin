@@ -1,3 +1,4 @@
+#+feature using-stmt
 package x86asm
 import "core:fmt"
 import "core:strings"
@@ -966,10 +967,11 @@ array_formatter :: proc(fi: ^fmt.Info, arg: any, verb: rune) -> bool {
     }
     return true
 }
-fmts := new_clone(make(map[typeid]fmt.User_Formatter))
+fmts: ^map[typeid]fmt.User_Formatter = nil
 fmt_mutex: sync.Mutex = {}
 set_formatter :: proc() {
     if sync.mutex_guard(&fmt_mutex) {
+        if fmts == nil do fmts = new_clone(make(map[typeid]fmt.User_Formatter))
         if formatters_set || fmt._user_formatters != nil { return }
         formatters_set = true
     fmt.set_user_formatters(fmts)

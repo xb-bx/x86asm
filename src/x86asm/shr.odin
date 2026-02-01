@@ -1,3 +1,4 @@
+#+feature using-stmt
 package x86asm
 import "core:fmt"
 shr_rm32_cl := Opcode { bytes = [4]u8 {0xd3, 0,0,0,}, size = 1, modrm_ext = 5}

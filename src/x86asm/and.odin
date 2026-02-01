@@ -1,3 +1,4 @@
+#+feature using-stmt
 package x86asm
 import "core:fmt"
 and_r8_rm8 := Opcode { bytes = [4]u8 {0x22, 0,0,0,}, size = 1 }

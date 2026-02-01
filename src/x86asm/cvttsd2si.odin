@@ -1,3 +1,4 @@
+#+feature using-stmt
 package x86asm
 import "core:fmt"
 

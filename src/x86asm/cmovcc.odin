@@ -1,3 +1,4 @@
+#+feature using-stmt
 package x86asm
 import "core:fmt"
 cmove_r32_rm32 := Opcode { bytes = [4]u8{0x0f, 0x44,0,0,}, size = 2 }
