@@ -17,3 +17,4 @@ lzcnt_reg64_reg64:: proc(using assembler: ^Assembler, dest: Reg64, src: Reg64) {
     generic_reg_or_imm_to_reg(assembler, rex, nil, lzcnt_rm16, REGISTER_DIRECT, int(dest), int(src), 0, 0, OperandEncoding.RM) 
 }
 
+lzcnt :: proc { lzcnt_reg32_reg32, lzcnt_reg64_reg64 }
