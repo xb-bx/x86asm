@@ -7,11 +7,11 @@ ODIN_FLAGS ?=\
 		   -debug \
 		   -thread-count:$(shell nproc) \
 		   -error-pos-style:unix \
-		   -use-separate-modules
+		   -keep-executable
 example: src/example/main.odin
 	odin build src/example $(COLLECTIONS_FLAGS) $(ODIN_FLAGS) -out:$@
 
 .PHONY: test
 test:
-	odin test src/tests $(COLLECTIONS_FLAGS) $(ODIN_FLAGS) -define:ODIN_TEST_FANCY=false -define=ODIN_TEST_TRACK_MEMORY=false
+	odin test src/tests $(COLLECTIONS_FLAGS) $(ODIN_FLAGS)  -define:ODIN_TEST_FANCY=false -define=ODIN_TEST_TRACK_MEMORY=false
 

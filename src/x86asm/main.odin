@@ -1,6 +1,7 @@
 #+feature using-stmt
 package x86asm
 import "core:fmt"
+import "base:runtime"
 import "core:strings"
 import "core:testing"
 import "core:sync"
@@ -969,20 +970,27 @@ array_formatter :: proc(fi: ^fmt.Info, arg: any, verb: rune) -> bool {
 }
 fmts: ^map[typeid]fmt.User_Formatter = nil
 fmt_mutex: sync.Mutex = {}
-set_formatter :: proc() {
-    if sync.mutex_guard(&fmt_mutex) {
-        if fmts == nil do fmts = new_clone(make(map[typeid]fmt.User_Formatter))
-        if formatters_set || fmt._user_formatters != nil { return }
-        formatters_set = true
+@(init)
+set_formatter :: proc "contextless" () {
+    context = runtime.default_context()
+    if fmts == nil do fmts = new_clone(make(map[typeid]fmt.User_Formatter))
+    if formatters_set || fmt._user_formatters != nil { return }
+    formatters_set = true
     fmt.set_user_formatters(fmts)
     err := fmt.register_user_formatter(Reg64, reg_formatter)
+    assert(err == nil)
     err = fmt.register_user_formatter(Reg32, reg_formatter)
+    assert(err == nil)
     err = fmt.register_user_formatter(Reg16, reg_formatter)
+    assert(err == nil)
     err = fmt.register_user_formatter(Reg8, reg_formatter)
+    assert(err == nil)
     err = fmt.register_user_formatter(Xmm, reg_formatter)
+    assert(err == nil)
     err = fmt.register_user_formatter(Memory, memory_formatter)
+    assert(err == nil)
     err = fmt.register_user_formatter([]u8, array_formatter)
-    }
+    assert(err == nil)
 }
 
 formatters_set := false

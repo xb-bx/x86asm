@@ -1,7 +1,7 @@
 #+feature using-stmt
 package test
 import "core:testing"
-import "core:os"
+import os "core:os/old"
 import "core:fmt"
 import "core:mem"
 import "base:intrinsics"

@@ -1,4 +1,5 @@
 #+feature using-stmt
+
 package test
 import "core:testing"
 import os "core:os/old"
@@ -8,16 +9,15 @@ import "base:intrinsics"
 import "core:strings"
 import "x86asm:x86asm"
 @test
-test_divss:: proc(t: ^testing.T) {
+test_rol_cl:: proc(t: ^testing.T) {
     using x86asm
     set_formatter()   
     context.user_ptr = t
     assembler := make_asm()
     for i in 0..=15 {
-        divss_xmm_xmm(assembler, Xmm(i), Xmm(i))
-        divss_xmm_mem32(assembler, Xmm(i), at(rax))
-        divsd_xmm_xmm(assembler, Xmm(i), Xmm(i))
-        divsd_xmm_mem64(assembler, Xmm(i), at(rax))
+        rol_reg16_cl(assembler, Reg16(i))
+        rol_reg32_cl(assembler, Reg32(i))
+        rol_reg64_cl(assembler, Reg64(i))
     }
     splited := strings.split(run_rasm_and_read_stdout(assembler.bytes[:]), SPLITTER)
     for str,i in splited {

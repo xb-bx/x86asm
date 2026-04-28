@@ -1,7 +1,7 @@
 #+feature using-stmt
 package test
 import "core:testing"
-import "core:os"
+import os "core:os/old"
 import "core:fmt"
 import "core:mem"
 import "base:intrinsics"
@@ -62,7 +62,7 @@ run_rasm_and_read_stdout :: proc(assembled: []u8) -> string {
         linux.dup2(pipes[1], linux.Fd(os.stdout))
         //args := [2]string {"-c", "cat main.odin"} 
         args := [2]string {"-c", fmt.aprintf("rasm2 -d %v", assembled)}
-        assert(os.execvp("/bin/bash", args[:]) == 0)
+        assert(os.execvp("/bin/bash", args[:]) == nil)
         return ""
     }
     else {
