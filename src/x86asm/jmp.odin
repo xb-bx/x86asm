@@ -74,6 +74,10 @@ jge :: proc(using assembler: ^Assembler, lbl: Label) {
     jcc(assembler, 0x8d, lbl)
     if remember { append(&mnemonics, fmt.aprintf("jge label_%i", lbl.id)) }
 }
+jp :: proc(using assembler: ^Assembler, lbl: Label) {
+    jcc(assembler, 0x8a, lbl)
+    if remember { append(&mnemonics, fmt.aprintf("jp label_%i", lbl.id)) }
+}
 
 
 
