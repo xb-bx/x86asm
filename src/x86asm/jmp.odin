@@ -34,6 +34,22 @@ jcc :: proc(using assembler: ^Assembler, cond: u8, lbl: Label) {
     append(&bytes, 0)
     append(&labelplaces, tuple(lbl.id, place))
 }
+ja :: proc(using assembler: ^Assembler, lbl: Label) {
+    jcc(assembler, 0x87, lbl)
+    if remember { append(&mnemonics, fmt.aprintf("ja label_%i", lbl.id)) }
+}
+jae :: proc(using assembler: ^Assembler, lbl: Label) {
+    jcc(assembler, 0x83, lbl)
+    if remember { append(&mnemonics, fmt.aprintf("jae label_%i", lbl.id)) }
+}
+jb :: proc(using assembler: ^Assembler, lbl: Label) {
+    jcc(assembler, 0x82, lbl)
+    if remember { append(&mnemonics, fmt.aprintf("jb label_%i", lbl.id)) }
+}
+jbe :: proc(using assembler: ^Assembler, lbl: Label) {
+    jcc(assembler, 0x86, lbl)
+    if remember { append(&mnemonics, fmt.aprintf("jbe label_%i", lbl.id)) }
+}
 je :: proc(using assembler: ^Assembler, lbl: Label) {
     jcc(assembler, 0x84, lbl)
     if remember { append(&mnemonics, fmt.aprintf("je label_%i", lbl.id)) }

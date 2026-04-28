@@ -7,6 +7,10 @@ cmovg_r32_rm32 := Opcode { bytes = [4]u8{0x0f, 0x4f,0,0,}, size = 2 }
 cmovle_r32_rm32 := Opcode { bytes = [4]u8{0x0f, 0x4e,0,0,}, size = 2 }
 cmovl_r32_rm32 := Opcode { bytes = [4]u8{0x0f, 0x4c,0,0,}, size = 2 }
 cmovne_r32_rm32 := Opcode { bytes = [4]u8{0x0f, 0x45,0,0,}, size = 2 }
+cmova_r32_rm32 := Opcode { bytes = [4]u8{0x0f, 0x47,0,0,}, size = 2 }
+cmovae_r32_rm32 := Opcode { bytes = [4]u8{0x0f, 0x43,0,0,}, size = 2 }
+cmovb_r32_rm32 := Opcode { bytes = [4]u8{0x0f, 0x42,0,0,}, size = 2 }
+cmovbe_r32_rm32 := Opcode { bytes = [4]u8{0x0f, 0x46,0,0,}, size = 2 }
 
 cmove :: proc { cmove_r64_r64, cmove_r32_r32, cmove_r16_r16 }
 cmove_r16_r16 :: proc(using assembler: ^Assembler, dest: Reg16, src: Reg16) {
@@ -211,5 +215,141 @@ cmovne_m64 :: proc(using assembler: ^Assembler, dest: Reg64, src: Memory) {
 cmovne_m16 :: proc(using assembler: ^Assembler, dest: Reg16, src: Memory) {
     if remember { append(&mnemonics, fmt.aprintf("cmovne %s, word %s", dest, src)) }
     generic_from_memory_to_reg(assembler, {}, true, cmovne_r32_rm32, .RM, int(dest), src)
+
+}
+
+cmova :: proc { cmova_r64_r64, cmova_r32_r32, cmova_r16_r16 }
+cmova_r16_r16 :: proc(using assembler: ^Assembler, dest: Reg16, src: Reg16) {
+    if remember { append(&mnemonics, fmt.aprintf("cmova %s, %s", dest, src)) }
+    generic_reg_or_imm_to_reg(assembler, {}, OLD_PREFIX, cmova_r32_rm32, 0b1100_0000, int(dest), int(src), 0, 0, .RM)
+
+}
+cmova_r32_r32 :: proc(using assembler: ^Assembler, dest: Reg32, src: Reg32) {
+    if remember { append(&mnemonics, fmt.aprintf("cmova %s, %s", dest, src)) }
+    generic_reg_or_imm_to_reg(assembler, {}, nil, cmova_r32_rm32, 0b1100_0000, int(dest), int(src), 0, 0, .RM)
+
+}
+
+cmova_r64_r64 :: proc(using assembler: ^Assembler, dest: Reg64, src: Reg64) {
+    if remember { append(&mnemonics, fmt.aprintf("cmova %s, %s", dest, src)) }
+    generic_reg_or_imm_to_reg(assembler, {.W}, nil, cmova_r32_rm32, 0b1100_0000, int(dest), int(src), 0, 0, .RM)
+
+}
+
+cmova_m32 :: proc(using assembler: ^Assembler, dest: Reg32, src: Memory) {
+    if remember { append(&mnemonics, fmt.aprintf("cmova %s, dword %s", dest, src)) }
+    generic_from_memory_to_reg(assembler, {}, false, cmova_r32_rm32, .RM, int(dest), src)
+
+}
+cmova_m64 :: proc(using assembler: ^Assembler, dest: Reg64, src: Memory) {
+    if remember { append(&mnemonics, fmt.aprintf("cmova %s, qword %s", dest, src)) }
+    generic_from_memory_to_reg(assembler, {.W}, false, cmova_r32_rm32, .RM, int(dest), src)
+
+}
+cmova_m16 :: proc(using assembler: ^Assembler, dest: Reg16, src: Memory) {
+    if remember { append(&mnemonics, fmt.aprintf("cmova %s, word %s", dest, src)) }
+    generic_from_memory_to_reg(assembler, {}, true, cmova_r32_rm32, .RM, int(dest), src)
+
+}
+
+cmovae :: proc { cmovae_r64_r64, cmovae_r32_r32, cmovae_r16_r16 }
+cmovae_r16_r16 :: proc(using assembler: ^Assembler, dest: Reg16, src: Reg16) {
+    if remember { append(&mnemonics, fmt.aprintf("cmovae %s, %s", dest, src)) }
+    generic_reg_or_imm_to_reg(assembler, {}, OLD_PREFIX, cmovae_r32_rm32, 0b1100_0000, int(dest), int(src), 0, 0, .RM)
+
+}
+cmovae_r32_r32 :: proc(using assembler: ^Assembler, dest: Reg32, src: Reg32) {
+    if remember { append(&mnemonics, fmt.aprintf("cmovae %s, %s", dest, src)) }
+    generic_reg_or_imm_to_reg(assembler, {}, nil, cmovae_r32_rm32, 0b1100_0000, int(dest), int(src), 0, 0, .RM)
+
+}
+
+cmovae_r64_r64 :: proc(using assembler: ^Assembler, dest: Reg64, src: Reg64) {
+    if remember { append(&mnemonics, fmt.aprintf("cmovae %s, %s", dest, src)) }
+    generic_reg_or_imm_to_reg(assembler, {.W}, nil, cmovae_r32_rm32, 0b1100_0000, int(dest), int(src), 0, 0, .RM)
+
+}
+
+cmovae_m32 :: proc(using assembler: ^Assembler, dest: Reg32, src: Memory) {
+    if remember { append(&mnemonics, fmt.aprintf("cmovae %s, dword %s", dest, src)) }
+    generic_from_memory_to_reg(assembler, {}, false, cmovae_r32_rm32, .RM, int(dest), src)
+
+}
+cmovae_m64 :: proc(using assembler: ^Assembler, dest: Reg64, src: Memory) {
+    if remember { append(&mnemonics, fmt.aprintf("cmovae %s, qword %s", dest, src)) }
+    generic_from_memory_to_reg(assembler, {.W}, false, cmovae_r32_rm32, .RM, int(dest), src)
+
+}
+cmovae_m16 :: proc(using assembler: ^Assembler, dest: Reg16, src: Memory) {
+    if remember { append(&mnemonics, fmt.aprintf("cmovae %s, word %s", dest, src)) }
+    generic_from_memory_to_reg(assembler, {}, true, cmovae_r32_rm32, .RM, int(dest), src)
+
+}
+
+cmovb :: proc { cmovb_r64_r64, cmovb_r32_r32, cmovb_r16_r16 }
+cmovb_r16_r16 :: proc(using assembler: ^Assembler, dest: Reg16, src: Reg16) {
+    if remember { append(&mnemonics, fmt.aprintf("cmovb %s, %s", dest, src)) }
+    generic_reg_or_imm_to_reg(assembler, {}, OLD_PREFIX, cmovb_r32_rm32, 0b1100_0000, int(dest), int(src), 0, 0, .RM)
+
+}
+cmovb_r32_r32 :: proc(using assembler: ^Assembler, dest: Reg32, src: Reg32) {
+    if remember { append(&mnemonics, fmt.aprintf("cmovb %s, %s", dest, src)) }
+    generic_reg_or_imm_to_reg(assembler, {}, nil, cmovb_r32_rm32, 0b1100_0000, int(dest), int(src), 0, 0, .RM)
+
+}
+
+cmovb_r64_r64 :: proc(using assembler: ^Assembler, dest: Reg64, src: Reg64) {
+    if remember { append(&mnemonics, fmt.aprintf("cmovb %s, %s", dest, src)) }
+    generic_reg_or_imm_to_reg(assembler, {.W}, nil, cmovb_r32_rm32, 0b1100_0000, int(dest), int(src), 0, 0, .RM)
+
+}
+
+cmovb_m32 :: proc(using assembler: ^Assembler, dest: Reg32, src: Memory) {
+    if remember { append(&mnemonics, fmt.aprintf("cmovb %s, dword %s", dest, src)) }
+    generic_from_memory_to_reg(assembler, {}, false, cmovb_r32_rm32, .RM, int(dest), src)
+
+}
+cmovb_m64 :: proc(using assembler: ^Assembler, dest: Reg64, src: Memory) {
+    if remember { append(&mnemonics, fmt.aprintf("cmovb %s, qword %s", dest, src)) }
+    generic_from_memory_to_reg(assembler, {.W}, false, cmovb_r32_rm32, .RM, int(dest), src)
+
+}
+cmovb_m16 :: proc(using assembler: ^Assembler, dest: Reg16, src: Memory) {
+    if remember { append(&mnemonics, fmt.aprintf("cmovb %s, word %s", dest, src)) }
+    generic_from_memory_to_reg(assembler, {}, true, cmovb_r32_rm32, .RM, int(dest), src)
+
+}
+
+cmovbe :: proc { cmovbe_r64_r64, cmovbe_r32_r32, cmovbe_r16_r16 }
+cmovbe_r16_r16 :: proc(using assembler: ^Assembler, dest: Reg16, src: Reg16) {
+    if remember { append(&mnemonics, fmt.aprintf("cmovbe %s, %s", dest, src)) }
+    generic_reg_or_imm_to_reg(assembler, {}, OLD_PREFIX, cmovbe_r32_rm32, 0b1100_0000, int(dest), int(src), 0, 0, .RM)
+
+}
+cmovbe_r32_r32 :: proc(using assembler: ^Assembler, dest: Reg32, src: Reg32) {
+    if remember { append(&mnemonics, fmt.aprintf("cmovbe %s, %s", dest, src)) }
+    generic_reg_or_imm_to_reg(assembler, {}, nil, cmovbe_r32_rm32, 0b1100_0000, int(dest), int(src), 0, 0, .RM)
+
+}
+
+cmovbe_r64_r64 :: proc(using assembler: ^Assembler, dest: Reg64, src: Reg64) {
+    if remember { append(&mnemonics, fmt.aprintf("cmovbe %s, %s", dest, src)) }
+    generic_reg_or_imm_to_reg(assembler, {.W}, nil, cmovbe_r32_rm32, 0b1100_0000, int(dest), int(src), 0, 0, .RM)
+
+}
+
+cmovbe_m32 :: proc(using assembler: ^Assembler, dest: Reg32, src: Memory) {
+    if remember { append(&mnemonics, fmt.aprintf("cmovbe %s, dword %s", dest, src)) }
+    generic_from_memory_to_reg(assembler, {}, false, cmovbe_r32_rm32, .RM, int(dest), src)
+
+}
+cmovbe_m64 :: proc(using assembler: ^Assembler, dest: Reg64, src: Memory) {
+    if remember { append(&mnemonics, fmt.aprintf("cmovbe %s, qword %s", dest, src)) }
+    generic_from_memory_to_reg(assembler, {.W}, false, cmovbe_r32_rm32, .RM, int(dest), src)
+
+}
+cmovbe_m16 :: proc(using assembler: ^Assembler, dest: Reg16, src: Memory) {
+    if remember { append(&mnemonics, fmt.aprintf("cmovbe %s, word %s", dest, src)) }
+    generic_from_memory_to_reg(assembler, {}, true, cmovbe_r32_rm32, .RM, int(dest), src)
 
 }
