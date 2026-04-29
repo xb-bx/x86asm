@@ -27,4 +27,4 @@ cvtsi2ss_xmm_reg64 :: proc(using assembler: ^Assembler, dest: Xmm, src: Reg64) {
     generic_reg_or_imm_to_reg(assembler, {.W}, nil, cvtsi2ss_xmm1_r32m32, REGISTER_DIRECT, int(dest), int(src), 0, 0, OperandEncoding.RM) 
 }
 
-cvtsi2ss :: proc { cvtsi2sd_xmm_reg64, cvtsi2sd_xmm_reg32 }
+cvtsi2ss :: proc { cvtsi2ss_xmm_reg64, cvtsi2ss_xmm_reg32 }

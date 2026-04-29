@@ -8,4 +8,10 @@ orpd_xmm_xmm :: proc(using assembler: ^Assembler, dest: Xmm, src: Xmm) {
     append(&assembler.bytes, 0x66)
     generic_reg_or_imm_to_reg(assembler, { }, nil, orpd_xm_xm, REGISTER_DIRECT, int(dest), int(src), 0, 0, OperandEncoding.RM) 
 }
+orps_xmm_xmm :: proc(using assembler: ^Assembler, dest: Xmm, src: Xmm) {
+    if remember { append(&mnemonics, fmt.aprintf("orps %s, %s", dest, src)) }
+    // append(&assembler.bytes, 0x66)
+    generic_reg_or_imm_to_reg(assembler, { }, nil, orpd_xm_xm, REGISTER_DIRECT, int(dest), int(src), 0, 0, OperandEncoding.RM) 
+}
 orpd :: proc { orpd_xmm_xmm }
+orps :: proc { orps_xmm_xmm }
