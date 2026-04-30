@@ -78,6 +78,10 @@ jp :: proc(using assembler: ^Assembler, lbl: Label) {
     jcc(assembler, 0x8a, lbl)
     if remember { append(&mnemonics, fmt.aprintf("jp label_%i", lbl.id)) }
 }
+js :: proc(using assembler: ^Assembler, lbl: Label) {
+    jcc(assembler, 0x88, lbl)
+    if remember { append(&mnemonics, fmt.aprintf("js label_%i", lbl.id)) }
+}
 
 
 
